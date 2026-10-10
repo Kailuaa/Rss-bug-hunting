@@ -13,9 +13,14 @@ let nextId = 1;
 function addTask() {
   const text = input.value;
   errorEl.hidden = true;
-  tasks.push({ id: nextId++, text: text, done: false });
-  input.value = "";
-  render();
+
+  if (!text.trim()) {
+    errorEl.hidden = false;
+  } else {
+    tasks.push({ id: nextId++, text: text, done: false });
+    input.value = "";
+    render();
+  }
 }
 
 function toggleTask(id) {
@@ -43,8 +48,9 @@ function updateCounter() {
 }
 
 function render() {
+  list.replaceChildren();
   const visible = getVisibleTasks();
-  for (let i = 1; i <= visible.length; i++) {
+  for (let i = 0; i < visible.length; i++) {
     const task = visible[i];
     const li = document.createElement("li");
     li.className = "task";
@@ -69,7 +75,7 @@ function render() {
   updateCounter();
 }
 
-addBtn.addEventListener("dblclick", addTask);
+addBtn.addEventListener("click", addTask);
 clearBtn.addEventListener("click", clearCompleted);
 
 filterButtons.forEach((btn) => {
